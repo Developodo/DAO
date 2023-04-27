@@ -70,6 +70,11 @@ public class AutorDAO implements DAO<Autor>{
 					pst.executeUpdate();
 					/** Libros */
 					LibroDAO ldao = new LibroDAO(this.conn);
+					List<Libro> librosanteriores = ldao.findByAutor(entity);
+					//TAREA, realizar la siguiente tarea de forma más eficiente
+					for(Libro l : librosanteriores) {
+						ldao.delete(l);
+					}
 					for(Libro l : entity.getLibros()) {
 						l.setAutor(entity);
 						ldao.save(l);
@@ -85,6 +90,11 @@ public class AutorDAO implements DAO<Autor>{
 				}
 				/** Libros */
 				LibroDAO ldao = new LibroDAO(this.conn);
+				List<Libro> librosanteriores = ldao.findByAutor(entity);
+				//TAREA, realizar la siguiente tarea de forma más eficiente
+				for(Libro l : librosanteriores) {
+					ldao.delete(l);
+				}
 				for(Libro l : entity.getLibros()) {
 					l.setAutor(entity);
 					ldao.save(l);

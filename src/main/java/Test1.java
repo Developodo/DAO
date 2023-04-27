@@ -12,6 +12,10 @@ public class Test1 {
 		l.setTitulo("La ciudad de las bestias");
 		l.setIsbn("9");
 		a.addLibro(l);
+		Libro l2=new Libro();
+		l2.setTitulo("La casa de los espiritus");
+		l2.setIsbn("11");
+		a.addLibro(l2);
 		
 		
 		AutorDAO adao = new AutorDAO();

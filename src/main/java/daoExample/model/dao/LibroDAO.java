@@ -17,7 +17,8 @@ public class LibroDAO implements DAO<Libro>{
 	private final static String INSERT ="INSERT INTO libro (isbn,titulo,dni_autor) VALUES (?,?,?)";
 	private final static String UPDATE ="UPDATE libro SET titulo=?, dni_autor=? WHERE isbn=?";
 	private final static String FINDBYAUTOR ="SELECT * from libro WHERE dni_autor=?";
-
+	private final static String DELETE ="DELETE from libro WHERE isbn=?";
+	
 	private Connection conn;
 	public LibroDAO(Connection conn) {
 		this.conn = conn;
@@ -71,10 +72,12 @@ public class LibroDAO implements DAO<Libro>{
 		Libro result = new Libro();
 		if(entity!=null) {
 			Libro l = findById(entity.getIsbn());
+			AutorDAO adao = new AutorDAO(this.conn);
+			Autor miautor= adao.findById(entity.getAutor().getDni());
 			if(l == null) {
 				//INSERT
-				AutorDAO adao = new AutorDAO(this.conn);
-				adao.save(entity.getAutor());
+				if(miautor==null)
+					adao.save(entity.getAutor());
 				try(PreparedStatement pst=this.conn.prepareStatement(INSERT)){
 					pst.setString(1, entity.getIsbn());
 					pst.setString(2, entity.getTitulo());
@@ -83,8 +86,8 @@ public class LibroDAO implements DAO<Libro>{
 				}
 			}else {
 				//UPDATE
-				AutorDAO adao = new AutorDAO(this.conn);
-				adao.save(entity.getAutor());
+				if(miautor==null)
+					adao.save(entity.getAutor());
 				try(PreparedStatement pst=this.conn.prepareStatement(UPDATE)){
 					pst.setString(1, entity.getTitulo());
 					pst.setString(2, entity.getAutor().getDni());
@@ -99,7 +102,12 @@ public class LibroDAO implements DAO<Libro>{
 
 	@Override
 	public void delete(Libro entity) throws SQLException {
-		// TODO Auto-generated method stub
+		if(entity!=null) {
+				try(PreparedStatement pst=this.conn.prepareStatement(DELETE)){
+					pst.setString(1, entity.getIsbn());
+					pst.executeUpdate();
+				}
+		}
 		
 	}
 	
