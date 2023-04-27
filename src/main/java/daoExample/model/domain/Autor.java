@@ -8,13 +8,12 @@ public class Autor {
 	private String nombre;
 	private String apellidos;
 	
-	private List<Libro> libros;
+	private List<Libro> libros = null;
 	
 	public Autor(String dni, String nombre, String apellidos) {
 		this.dni = dni;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
-		libros = new ArrayList<Libro>();
 	}
 	public Autor() {
 		this("","","");
@@ -37,12 +36,17 @@ public class Autor {
 	public void setApellidos(String apellidos) {
 		this.apellidos = apellidos;
 	}
-	
 	public List<Libro> getLibros() {
 		return libros;
 	}
 	public void setLibros(List<Libro> libros) {
 		this.libros = libros;
+	}
+	public void addLibro(Libro libro) {
+		if(this.libros==null) {
+			this.libros = new ArrayList<>();
+		}
+		this.libros.add(libro);
 	}
 	@Override
 	public int hashCode() {

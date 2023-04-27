@@ -9,6 +9,7 @@ import java.util.List;
 
 import daoExample.model.connections.ConnectionMySQL;
 import daoExample.model.domain.Autor;
+import daoExample.model.domain.Libro;
 
 public class AutorDAO implements DAO<Autor>{
 	private final static String FINDALL ="SELECT * from autor";
@@ -67,6 +68,12 @@ public class AutorDAO implements DAO<Autor>{
 					pst.setString(2, entity.getNombre());
 					pst.setString(3, entity.getApellidos());
 					pst.executeUpdate();
+					/** Libros */
+					LibroDAO ldao = new LibroDAO(this.conn);
+					for(Libro l : entity.getLibros()) {
+						l.setAutor(entity);
+						ldao.save(l);
+					}
 				}
 			}else {
 				//UPDATE
@@ -75,6 +82,12 @@ public class AutorDAO implements DAO<Autor>{
 					pst.setString(2, entity.getApellidos());
 					pst.setString(3, entity.getDni());
 					pst.executeUpdate();
+				}
+				/** Libros */
+				LibroDAO ldao = new LibroDAO(this.conn);
+				for(Libro l : entity.getLibros()) {
+					l.setAutor(entity);
+					ldao.save(l);
 				}
 			}
 			result=entity;
